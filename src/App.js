@@ -24,7 +24,7 @@ const initialDisabled = true;
 
 function App() {
   
-  const [user, setUser] = useState([]); //array
+  const [user, setUser] = useState(initialUser); //array
   const [formValues, setFormValues] = useState(initialFormValues); //object
   const [formErrors, setFormErrors] = useState(initialFormErrors); //object
   const [disabled, setDisabled] = useState(initialDisabled); //boolean
@@ -35,7 +35,7 @@ function App() {
     axios
     .get('https://reqres.in/api/users')
     .then(res => {
-      setUser(res.data);
+      setUser([res.data]);
     })
     .catch(err => {
       console.log(err);
@@ -63,12 +63,12 @@ function App() {
       setFormErrors({
         ...formErrors, [name]: '',
       })
+    })
       .catch(err => {
         setFormErrors({
           ...formErrors, [name]: err.errors[0],
         })
       })
-    })
 
     setFormValues({
       ...formValues,
@@ -85,12 +85,14 @@ function App() {
         term => formValues[term]
       )
     }
+
     //post new user using postNew user
     postNewUser(newUser);
+
   }
 
   useEffect(() => {
-    getUser()
+    getUser();
   }, [])
 
   useEffect(() => {
@@ -111,7 +113,7 @@ function App() {
       submit={formSubmit}
       disabled={disabled}
       errors={formErrors} />
-        
+      <div>
       {
         user.map(use => {
           return (
@@ -120,12 +122,12 @@ function App() {
               <h3>{use.email}</h3>
               <h4>{use.password}</h4>
             </div>
-          )
+          );
         })
       }
-
+      </div>
     </div>
   );
-}
+  }
 
 export default App;
